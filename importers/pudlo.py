@@ -34,6 +34,7 @@ class PudloImporter(wg2.importers.base.Importer):
                 for url in urls_page:
                     if (df_urls['url']==url).any():
                         print('Existing url : ',url)
+                        continue_loop = False
                     else:
                         print('New url : ',url)
                         df_urls = df_urls.append({'url':url,'filename':self.url_to_filename(url)}, ignore_index=True)
@@ -70,6 +71,8 @@ class PudloImporter(wg2.importers.base.Importer):
                 elif s.attrib['itemprop'] == 'addressLocality':
                     city_str = s.css('::text').get()
                     words = city_str.split(' ')
+                    code = ''
+                    city = ''
                     if words[0] == 'Paris':
                         art = re.sub('[erm]','', words[-1])
                         code = str(75000+int(art))
@@ -77,8 +80,8 @@ class PudloImporter(wg2.importers.base.Importer):
                     else:
                         code = words[0]
                         city = ' '.join(words[1:])
-        ret['address'] = street + ', ' + code + ', '+city
-        ret['addr_details'] = {'street' : street, 'city' : city, 'code' : code,}
+                    ret['address'] = street + ', ' + code + ', '+city
+                    ret['addr_details'] = {'street' : street, 'city' : city, 'code' : code,}
         ret['tags'] = json.dumps(selector.css('span.apropos_info_tag>a::text').getall())
         ret['categories'] = json.dumps(selector.css('span.apropos_info_cat>a::text').getall())
         if selector.css('div.icone_coeur_article').get() != None:
@@ -90,14 +93,14 @@ class PudloImporter(wg2.importers.base.Importer):
         return ret
 
     def parse_coords(self, page):
+        ret = [0.,0.]
         selector = parsel.Selector(page)
         gmapurl = selector.css('iframe::attr(src)').get()
-        q = urllib.parse.parse_qs(urllib.parse.urlparse(gmapurl)[4])['q'][0]
-        if re.match('^[\d\.]*,[\d\.\-]*$',q):
-            coords_txt = q.split(',')
-            ret = [float(coords_txt[0]),float(coords_txt[1])]
-        else :
-            ret = [0.,0.]
+        if ( gmapurl is not None):
+            q = urllib.parse.parse_qs(urllib.parse.urlparse(gmapurl)[4])['q'][0]
+            if re.match('^[\d\.]*,[\d\.\-]*$',q):
+                coords_txt = q.split(',')
+                ret = [float(coords_txt[0]),float(coords_txt[1])]
         return ret
 
 

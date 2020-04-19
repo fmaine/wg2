@@ -8,7 +8,7 @@
 {% endblock %}
 {% block content %}
 <div class="div-recherche">
-<h2>Recherchez des restaurants des alentours</h2>
+<h2>Recherchez des restaurants aux alentours</h2>
 <form id= "form-search" action="/" method="get">
   <div class="input-group mb-3">
     <div class="input-group-prepend">
@@ -57,7 +57,7 @@
           <small> {{ review.review_date }} </small>
         </h5>
         {% for tag in review.tags %}
-         <span class="badge badge-light">{{ tag }}</span>
+         <span class="badge badge-secondary">{{ tag }}</span>
         {% endfor %}
         <p class="card-text">{{ review.details }}</p>
       {% endfor %}
@@ -65,11 +65,6 @@
   </div>
   {% endfor %}
 </div>
-
-<code>
-{{response}}
-</code>
-
 
 <script>
 function submitPosition(position) {

@@ -10,6 +10,7 @@ __email__ = "fm@freedom-partners.com"
 
 '''
 
+import unicodedata
 import pandas as pd
 
 class PlaceDataframe():
@@ -26,8 +27,15 @@ class PlaceDataframe():
         self._places = pd.concat([self._places,item_df])
         return id
 
+#    def normalize_text(txt):
+#        return unicodedata.normalize('NFKD', txt).encode('ascii', 'ignore').decode().lower()
+
+#    def compare_places(row,title,lat,lng):
+#        return abs(row['lat']-lat)<0.1 and abs(row['lng']-lng)<0.1 and normalize_text(row['title']) == normalize_text(title)
+
     def find(self,title,lat,lng):
         return self._places[abs(self._places['lat']-lat)<0.1][abs(self._places['lng']-lng)<0.1][self._places['title']==title]
+
 
     def find_or_insert(self,item) :
         id = 0
