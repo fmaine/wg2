@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Index{% endblock %}
+{% block head %}
+    {{ super() }}
+    <style type="text/css">
+        .important { color: #336699; }
+    </style>
+{% endblock %}
+{% block content %}
+<div class="div-recherche">
+<h2>Recherchez des restaurants des alentours</h2>
+<form action="/" method="get">
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Adresse</span>
+    </div>
+    <input type="text" class="form-control" id="address" name="address"
+    {% if response.address %} value="{{ response.address }}" {% endif %} >
+  </div>
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Options</span>
+    </div>
+    <input type="text" class="form-control" id="options" name="options"
+    {% if response.options %} value="{{ response.options }}" {% endif %} >
+  </div>
+  <div class="div-buttons clearfix">
+    <button class="btn btn-primary float-left" type="submit">Rechercher</button>
+    <button type="button" onclick="getCoords()" class="btn btn-primary float-right">Autour de moi</button>
+  </div>
+</form>
+<sr/>
+</div>
+
+<div class="div-reponse">
+  <h2>Les critiques indexées</h2>
+  {% for place in response.places %}
+
+  <div class="card margin5">
+    <div class="card-header">
+      <h3><a href = "{{ place.official_url }}" target="_blank">
+              {{ place.title }}
+            </a></h3>
+      <a class="btn btn-link"
+        href = "https://www.google.com/maps/search/?api=1&query={{ place.lat }},{{ place.lng }}&query={{ place.title }}"
+        target="_blank">
+        {{ place.address }}
+      </a>
+
+    </div>
+    <div class="card-body">
+      {% for review in place.reviews %}
+        <h5 class="card-title">
+          <a href = {{ review.url }} target="_blank">{{ review.origin }}</a>
+          <small> {{ review.review_date }} </small>
+        </h5>
+        {% for tag in review.tags %}
+         <span class="badge badge-light">{{ tag }}</span>
+        {% endfor %}
+        <p class="card-text">{{ review.details }}</p>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<code>
+{{response}}
+</code>
+
+
+<script>
+function maPosition(position) {
+  document.getElementById("lat").innerHTML = position.coords.latitude;
+  document.getElementById("lng").innerHTML = position.coords.longitude;
+  console.log(position.coords.latitude)
+  console.log(position.coords.longitude)
+}
+
+function getCoords(){
+  console.log("getCoords")
+  if(navigator.geolocation)
+    navigator.geolocation.getCurrentPosition(maPosition);
+}
+</script>
+{% endblock %}
