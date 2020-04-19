@@ -39,7 +39,9 @@ class PlaceFinder():
         response['lat'] = lat = args.get('lat')
         response['lng'] = lng = args.get('lng')
         response['address'] = addr = args.get('address')
-        if (addr):
+        if (lat and lng):
+            response ['places'] = self.find_coords(float(lat),float(lng))
+        elif (addr):
             coords = self._geo.geocode(addr)
             response ['lat'] = coords[0]
             response ['lng'] = coords[1]

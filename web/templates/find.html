@@ -9,7 +9,7 @@
 {% block content %}
 <div class="div-recherche">
 <h2>Recherchez des restaurants des alentours</h2>
-<form action="/" method="get">
+<form id= "form-search" action="/" method="get">
   <div class="input-group mb-3">
     <div class="input-group-prepend">
       <span class="input-group-text">Adresse</span>
@@ -23,10 +23,12 @@
     </div>
     <input type="text" class="form-control" id="options" name="options"
     {% if response.options %} value="{{ response.options }}" {% endif %} >
+    <input type="hidden" class="form-control" id="lat" name="lat" >
+    <input type="hidden" class="form-control" id="lng" name="lng" >
   </div>
   <div class="div-buttons clearfix">
     <button class="btn btn-primary float-left" type="submit">Rechercher</button>
-    <button type="button" onclick="getCoords()" class="btn btn-primary float-right">Autour de moi</button>
+    <button type="button" onclick="autourDeMoi()" class="btn btn-primary float-right">Autour de moi</button>
   </div>
 </form>
 <sr/>
@@ -70,17 +72,20 @@
 
 
 <script>
-function maPosition(position) {
-  document.getElementById("lat").innerHTML = position.coords.latitude;
-  document.getElementById("lng").innerHTML = position.coords.longitude;
-  console.log(position.coords.latitude)
-  console.log(position.coords.longitude)
+function submitPosition(position) {
+  document.getElementById("address").value = '';
+  document.getElementById("lat").value = position.coords.latitude;
+  document.getElementById("lng").value = position.coords.longitude;
+  document.getElementById("form-search").submit() ;
 }
 
-function getCoords(){
+function autourDeMoi(){
   console.log("getCoords")
   if(navigator.geolocation)
-    navigator.geolocation.getCurrentPosition(maPosition);
+    navigator.geolocation.getCurrentPosition(submitPosition);
 }
+
+
+
 </script>
 {% endblock %}

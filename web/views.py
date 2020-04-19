@@ -26,7 +26,7 @@ def find():
     path = request.path
     args = request.args
     response = pf.find(args)
-    return render_template('index.html', method=method, host=host, path=path, args=args, response=response)
+    return render_template('find.html', method=method, host=host, path=path, args=args, response=response)
 
 @app.route("/test")
 def test():
