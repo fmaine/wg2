@@ -18,6 +18,7 @@ app = Flask(__name__,
 
 pf = wg2.web.place.PlaceFinder()
 
+
 @app.route("/")
 @app.route("/find")
 def find():
@@ -27,6 +28,7 @@ def find():
     args = request.args
     response = pf.find(args)
     return render_template('find.html', method=method, host=host, path=path, args=args, response=response)
+
 
 @app.route("/test")
 def test():

@@ -22,6 +22,7 @@ class Importer():
 
     _origin = ''
     _data_root = 'data/'
+    _page_extension = '.html'
     _user_agent = 'wherebot'
     _place_keys = [
         'title', 'address', 'addr_details', 'lat', 'lng', 'official_url', 'timestamp', 'closed',
@@ -67,7 +68,7 @@ class Importer():
     def acquire_list(self):
         pass
 
-    def parse_page(self, url, filename):
+    def parse_page(self, url, page):
         pass
 
     def acquire_pages(self):
@@ -85,6 +86,25 @@ class Importer():
                 f.close()
 
     def init_dataset(self):
+        self._dataset = pd.DataFrame(columns=self._place_keys)
+        df_urls = self.load_urls()
+        for index, row in df_urls.iterrows():
+            print('Processing : ',index,' - ',row['url'])
+            filename = self._data_root+'html/'+self._origin+'/'+row['filename']+self._page_extension
+            if (os.path.exists(filename)):
+                with open(filename) as file:
+                    page = file.read()
+                    data = self.parse_page(row['url'],page)
+                    if ('title' in data):
+                        self._dataset = self._dataset.append(data, ignore_index=True)
+                    else:
+                        print('No title')
+            else:
+                print('File not found')
+        self.save_dataset()
+        return self._dataset
+
+    def update_dataset(self):
         self.load_dataset()
         df_urls = self.load_urls()
         for index, row in df_urls.iterrows():

@@ -48,16 +48,15 @@ class PlaceDataframe():
 
 class Merger():
 
+    _sources = ['pdl','tra','mcl','lfd','tmo',]
     _data_root = 'data/'
     _place_db_filename = _data_root+'place_db.csv'
     _review_db_filename = _data_root+'review_db.csv'
 
     def merge_reviews(self):
-        pdl = pd.read_csv('data/pdl_dataset.csv')
-        mcl = pd.read_csv('data/mcl_dataset.csv')
-        tra = pd.read_csv('data/tra_dataset.csv')
         reviews = pd.DataFrame()
-        for df in [pdl,mcl,tra]:
+        for source in self._sources:
+            df = pd.read_csv(self._data_root+source+'_dataset.csv')
             reviews = reviews.append(df, ignore_index=True)
         self._reviews = reviews.sort_values(['lat','lng'])
         self._reviews.to_csv('data/reviews.csv',index=False)
