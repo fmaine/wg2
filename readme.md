@@ -36,6 +36,7 @@ We like to keep the list short and simple
 ## Directory Structure
 
 * `wg2` : These files = python sources
+  * `web` : Web front-end
   * `importers` : Data importers
   * `db` : Database cleansing, curation and export
   * `util` : Miscellaneous tools and utils
