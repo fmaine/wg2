@@ -14,7 +14,6 @@ If you live in Paris, or even more if you are visiting Paris, you've got to chec
 
 Where.guru app is still in its early stages and is looking for passionate developers, ux designers, data scientists, system engineers, online marketing gurus and community managers.
 We believe it is a great opportunity for talented professionals to contribute to a cool project.
-Please make sure you check our [Contributing Guidelines](doc/CONTRIBUTING.md) and [Code of Conduct ](doc/CODE_OF_CONDUCT.md)
 
 Please do not hesitate to contact the [author](https://github.com/fmaine) if this project inspires you!
 
@@ -35,17 +34,17 @@ We like to keep the list short and simple
 
 ## Directory Structure
 
-* `wg2` : These files = python sources
-  * `web` : Web front-end
-  * `importers` : Data importers
-  * `db` : Database cleansing, curation and export
-  * `util` : Miscellaneous tools and utils
-* `data` : Datafiles directory
+* `wg2/` : These files - python sources
+  * `web/` : Web front-end
+  * `importers/` : Data importers
+  * `db/` : Database cleansing, curation and export
+  * `util/` : Miscellaneous tools and utils
+* `data` : Datafiles directory - You need to create it
   * `data/geocodercache.json` : Development geocoder cache file
   * `data/xxx_urls.csv` : Review urls for source xxx
   * `data/xxx_dataset.csv` : Reviews imported from source xxx
   * `data/reviews.csv` : Merged reviews
-  * `data/prod/` : Production files
+  * `prod/` : Production files
     * `data/prod/geocodercache.json` : Production geocoder cache file    
     * `data/prod/place_db.csv` : Production place file    
     * `data/prod/review_db.csv` : Production review file    
