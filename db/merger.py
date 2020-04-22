@@ -27,12 +27,6 @@ class PlaceDataframe():
         self._places = pd.concat([self._places,item_df])
         return id
 
-#    def normalize_text(txt):
-#        return unicodedata.normalize('NFKD', txt).encode('ascii', 'ignore').decode().lower()
-
-#    def compare_places(row,title,lat,lng):
-#        return abs(row['lat']-lat)<0.1 and abs(row['lng']-lng)<0.1 and normalize_text(row['title']) == normalize_text(title)
-
     def find(self,title,lat,lng):
         return self._places[abs(self._places['lat']-lat)<0.1][abs(self._places['lng']-lng)<0.1][self._places['title']==title]
 
@@ -48,7 +42,7 @@ class PlaceDataframe():
 
 class Merger():
 
-    _sources = ['pdl','tra','mcl','lfd','tmo',]
+    _sources = ['pdl','tra','mcl','lfd','tmo']
     _data_root = 'data/'
     _place_db_filename = _data_root+'place_db.csv'
     _review_db_filename = _data_root+'review_db.csv'
@@ -56,7 +50,8 @@ class Merger():
     def merge_reviews(self):
         reviews = pd.DataFrame()
         for source in self._sources:
-            df = pd.read_csv(self._data_root+source+'_dataset.csv')
+            filename = self._data_root+source+'_dataset.csv'
+            df = pd.read_csv(filename)
             reviews = reviews.append(df, ignore_index=True)
         self._reviews = reviews.sort_values(['lat','lng'])
         self._reviews.to_csv('data/reviews.csv',index=False)

@@ -35,25 +35,23 @@ We like to keep the list short and simple
 
 ## Directory Structure
 
-* `python` : python sources
-  * `api` : Web service and database code
-  * `importers` : Data importers = Spiders + Importers
-  * `db` : Database import, cleansing, curation and export
-  * `misc` : Miscellaneous tools and utils
-* `www` : Static web files - html, css, images, js...
-* `doc` : documentation
-* `data` : Database and datafiles
-* `bin` : Executables
-* `etc` : Config files
-* `log` : Log files
-
-
-Use of python 3 `virtualenv` is recommended is you want to install the package
+* `wg2` : These files = python sources
+  * `importers` : Data importers
+  * `db` : Database cleansing, curation and export
+  * `util` : Miscellaneous tools and utils
+* `data` : Datafiles directory
+  * `data/geocodercache.json` : Development geocoder cache file
+  * `data/xxx_urls.csv` : Review urls for source xxx
+  * `data/xxx_dataset.csv` : Reviews imported from source xxx
+  * `data/reviews.csv` : Merged reviews
+  * `data/prod/` : Production files
+    * `data/prod/geocodercache.json` : Production geocoder cache file    
+    * `data/prod/place_db.csv` : Production place file    
+    * `data/prod/review_db.csv` : Production review file    
 
 ## Authors
 
 * **François Bancilhon** - *Advisor & Guru*
-* **Thibault Taupin** - *UX & UI design* - [thibaulttaupin](https://github.com/thibaulttaupin)
 * **François Maine** - *Initial work and Benevolent Dictatorship* - [fmaine](https://github.com/fmaine)
 
 ## License
