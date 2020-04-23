@@ -55,6 +55,9 @@ class TimeoutImporter(wg2.importers.base.Importer):
         df_urls.to_csv(self.urls_filename(), index=False)
         return df_urls
 
+    def acquire_pages(self):
+        pass
+
     def parse_page(self, url, page):
 
         def is_tag(tag):
@@ -81,7 +84,7 @@ class TimeoutImporter(wg2.importers.base.Importer):
         result['lng'] = item.get('longitude')
         result['address'] = item.get('address1', '') + ' ' + item.get('address2', '') + ' ' + item.get('city', '')
         result['addr_details'] = {'street' : item.get('address1', ''), 'city' : item.get('city', ''), 'code' : ''}
-        result['tags'] = [tag['name'] for tag in item['categorisation']['tags'] if is_tag(tag['name'])]
+        result['tags'] = json.dumps([tag['name'] for tag in item['categorisation']['tags'] if is_tag(tag['name'])])
         result['rating'] = find_rate_in_tags(item['categorisation']['tags'])
         result['review_date'] = item['published_at'][:10]
 

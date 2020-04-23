@@ -8,6 +8,9 @@ __email__ = "fm@freedom-partners.com"
     Base class for wg2 data imports
     Nedds to be subclassed for each datasource
 
+    Synopsys :
+
+
 '''
 
 import os
@@ -69,6 +72,9 @@ class Importer():
         pass
 
     def parse_page(self, url, page):
+        pass
+
+    def acquire_list(self):
         pass
 
     def acquire_pages(self):

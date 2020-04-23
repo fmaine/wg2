@@ -42,7 +42,8 @@ class PlaceDataframe():
 
 class Merger():
 
-    _sources = ['pdl','tra','mcl','lfd','tmo']
+#    _sources = ['pdl','tra','mcl','lfd','tmo']
+    _sources = ['pdl','tra','mcl','lfd'] # Timeout import not ready...
     _data_root = 'data/'
     _place_db_filename = _data_root+'place_db.csv'
     _review_db_filename = _data_root+'review_db.csv'

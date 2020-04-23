@@ -39,15 +39,15 @@ We like to keep the list short and simple
   * `importers/` : Data importers
   * `db/` : Database cleansing, curation and export
   * `util/` : Miscellaneous tools and utils
-* `data` : Datafiles directory - You need to create it
-  * `data/geocodercache.json` : Development geocoder cache file
-  * `data/xxx_urls.csv` : Review urls for source xxx
-  * `data/xxx_dataset.csv` : Reviews imported from source xxx
-  * `data/reviews.csv` : Merged reviews
+* `data/` : Datafiles directory - You need to create it
+  * `geocodercache.json` : Development geocoder cache file
+  * `xxx_urls.csv` : Review urls for source xxx
+  * `xxx_dataset.csv` : Reviews imported from source xxx
+  * `reviews.csv` : Merged reviews
   * `prod/` : Production files
-    * `data/prod/geocodercache.json` : Production geocoder cache file    
-    * `data/prod/place_db.csv` : Production place file    
-    * `data/prod/review_db.csv` : Production review file    
+    * `geocodercache.json` : Production geocoder cache file    
+    * `place_db.csv` : Production place file    
+    * `review_db.csv` : Production review file    
 
 ## Authors
 
