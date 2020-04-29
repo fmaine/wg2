@@ -14,10 +14,8 @@ class Geocoder():
     _cache = dict()
     _cache_dir  = ''
     _cache_filename = 'geocoder_cache.json'
-    _logger = None
 
     def __init__(self,cache_dir=''):
-        self._logger = logging.getLogger()
         self._cache_dir = cache_dir
         self.load_cache()
 
@@ -41,10 +39,10 @@ class Geocoder():
     def geocode(self,address):
         normaddr = self.normalize(address)
         if normaddr in self._cache:
-            self._logger.warning('Address in cache : ' + address)
+            logging.info('Address in cache : ' + address)
             geocode_result=self._cache[normaddr]
         else:
-            self._logger.warning('Geocoding address : ' + address)
+            logging.info('Geocoding address : ' + address)
             geocode_result=self._geocode_bano(address)
             self._cache[normaddr]=geocode_result
             self.save_cache()

@@ -13,6 +13,7 @@ __email__ = "fm@freedom-partners.com"
 
 '''
 
+import logging
 import os
 import urllib
 import re
@@ -95,18 +96,19 @@ class Importer():
         self._dataset = pd.DataFrame(columns=self._place_keys)
         df_urls = self.load_urls()
         for index, row in df_urls.iterrows():
-            print('Processing : ',index,' - ',row['url'])
+            logging.info('Processing : ',index,' - ',row['url'])
             filename = self._data_root+'html/'+self._origin+'/'+row['filename']+self._page_extension
             if (os.path.exists(filename)):
                 with open(filename) as file:
                     page = file.read()
                     data = self.parse_page(row['url'],page)
-                    if ('title' in data):
+                    if (data.get('title') and data.get('details')):
                         self._dataset = self._dataset.append(data, ignore_index=True)
                     else:
-                        print('No title')
+                        logging.info('No title or details')
             else:
-                print('File not found')
+                logging.info('File not found')
+        self._dataset = self._dataset[self._dataset['details'].notnull()]
         self.save_dataset()
         return self._dataset
 

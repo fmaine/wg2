@@ -4,9 +4,11 @@ __email__ = "fm@freedom-partners.com"
 
 '''
     wg2 Merger
-
-    Base class for wg2 data imports
-    Nedds to be subclassed for each datasource
+    Synopsis :
+        merger.merge_reviews() : Merge all reviews ina single file / dataframe
+        merger.replace_places() : unify matching places with different names
+        merger.close_places() : Marks closed corresponding places
+        merger.create_db() : Creates db files for website
 
 '''
 
@@ -44,8 +46,8 @@ class PlaceDataframe():
 
 class Merger():
 
-#    _sources = ['pdl','tra','mcl','lfd','tmo']
-    _sources = ['pdl','tra','mcl','lfd'] # Timeout import not ready...
+    _sources = ['pdl','tra','mcl','lfd','tmo']
+#    _sources = ['pdl','tra','mcl','lfd'] # Timeout import not ready...
     _data_root = 'data/'
     _reviews_filename = _data_root+'reviews.csv'
     _place_replace_filename = _data_root+'place_replace.csv'
@@ -69,7 +71,7 @@ class Merger():
         df_replace['titleaddr'] = df_replace['title_replace'] + df_replace['address_replace']
         for index, row in df_replace.iterrows():
             idx  = df_reviews[df_reviews['titleaddr']==row['titleaddr']].index
-            logging.info('Replace : '+df_reviews.iloc[idx]['title'])
+            logging.info('Replace : '+df_reviews['title'].iloc[idx])
             df_reviews.at[idx,'title'] = row['title']
             df_reviews.at[idx,'address'] = row['address']
         df_reviews.to_csv(self._reviews_filename,index=False)
@@ -84,7 +86,6 @@ class Merger():
             logging.info('Closed : '+df_reviews.iloc[idx]['title'])
             df_reviews.at[idx,'closed'] = row['closed']
         df_reviews.to_csv(self._reviews_filename,index=False)
-
 
     def create_db(self):
         pdf = PlaceDataframe()

@@ -9,6 +9,7 @@ __email__ = "fm@freedom-partners.com"
 
 
 import datetime
+import unicodedata
 import re
 import json
 import xmltodict
@@ -24,6 +25,24 @@ class TimeoutImporter(wg2.importers.base.Importer):
     def __init__(self):
         self._origin = 'tmo'
         self._page_extension = '.json'
+
+    def clean_text(self,txt):
+        txt2 = None
+        if txt is not None :
+            txt2 = unicodedata.normalize("NFKD", txt)
+            txt2 = txt2.replace('Ã©','é')
+            txt2 = txt2.replace('Å“','è')
+            txt2 = txt2.replace('Ãa','ê')
+            txt2 = txt2.replace("Ã ́",'ô')
+            txt2 = txt2.replace('Ã ̄','ï')
+            txt2 = txt2.replace('Ã®','î')
+            txt2 = txt2.replace('Ã ','à')
+            txt2 = txt2.replace('Ã§','ç')
+            txt2 = txt2.replace('Ã»','û')
+            txt2 = txt2.replace('Ã1','ù')
+            txt2 = txt2.replace('â€TM',"'")
+            txt2 = txt2.replace('Â ',' ')
+        return txt2
 
 
     def acquire_list(self):
@@ -78,13 +97,13 @@ class TimeoutImporter(wg2.importers.base.Importer):
         result['origin'] = self._origin
         result['type'] = item['type']
         result['url'] = item['url']
-        result['title'] = item['name']
-        result['details'] = item.get('annotation')
+        result['title'] = self.clean_text(item['name'])
+        result['details'] = self.clean_text(item.get('annotation'))
         result['lat'] = item.get('latitude')
         result['lng'] = item.get('longitude')
-        result['address'] = item.get('address1', '') + ' ' + item.get('address2', '') + ' ' + item.get('city', '')
+        result['address'] = self.clean_text(item.get('address1', '') + ' ' + item.get('address2', '') + ' ' + item.get('city', ''))
         result['addr_details'] = {'street' : item.get('address1', ''), 'city' : item.get('city', ''), 'code' : ''}
-        result['tags'] = json.dumps([tag['name'] for tag in item['categorisation']['tags'] if is_tag(tag['name'])])
+        result['tags'] = json.dumps([self.clean_text(tag['name']) for tag in item['categorisation']['tags'] if is_tag(tag['name'])])
         result['rating'] = find_rate_in_tags(item['categorisation']['tags'])
         result['review_date'] = item['published_at'][:10]
 
