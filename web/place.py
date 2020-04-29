@@ -5,6 +5,7 @@ __email__ = "fm@freedom-partners.com"
 import os
 import json
 import math
+import logging
 import pandas as pd
 
 import wg2.util.geocoder
@@ -31,9 +32,11 @@ class PlaceFinder():
     def __init__(self):
         self._reviews = pd.read_csv(self._reviews_filename)
         self._places = pd.read_csv(self._places_filename)
+        self._places = self._places[self._places['closed']!=True]
         self._geo = wg2.util.geocoder.Geocoder(cache_dir='data/prod/')
 
     def find(self, args):
+        logging.info('PlaceFinder.find - args : '+str(args))
         response = dict()
         response['lat'] = lat = args.get('lat')
         response['lng'] = lng = args.get('lng')

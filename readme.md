@@ -22,7 +22,7 @@ Please do not hesitate to contact the [author](https://github.com/fmaine) if thi
 We like to keep the list short and simple
 * The main programming language for the platform is **Python 3**
 * Data are managed with **pandas dataframes**
-* Web side based on  **HTML5**, **CSS3** and **JQuery**
+* Web side based on  **HTML5**, **CSS3**, with **Bootstrap** and **JQuery**
 * Dynamic data are handled server side with **flask** served by **gunicorn**
 * where.guru is run on Ubuntu 18 + nginx + gunicorn
 * Some notable dependencies :
@@ -36,6 +36,8 @@ We like to keep the list short and simple
 
 * `wg2/` : These files - python sources
   * `web/` : Web front-end
+    * `static/` : Static files
+    * `templates/` : Dynamic page templates
   * `importers/` : Data importers
   * `db/` : Database cleansing, curation and export
   * `util/` : Miscellaneous tools and utils
