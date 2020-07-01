@@ -103,7 +103,7 @@ class TimeoutImporter(wg2.importers.base.Importer):
         result['lng'] = item.get('longitude')
         result['address'] = self.clean_text(item.get('address1', '') + ' ' + item.get('address2', '') + ' ' + item.get('city', ''))
         result['addr_details'] = {'street' : item.get('address1', ''), 'city' : item.get('city', ''), 'code' : ''}
-        result['tags'] = json.dumps([self.clean_text(tag['name']) for tag in item['categorisation']['tags'] if is_tag(tag['name'])])
+        result['tags_json'] = json.dumps([self.clean_text(tag['name']) for tag in item['categorisation']['tags'] if is_tag(tag['name'])])
         result['rating'] = find_rate_in_tags(item['categorisation']['tags'])
         result['review_date'] = item['published_at'][:10]
 

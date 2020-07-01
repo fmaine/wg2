@@ -42,7 +42,12 @@
     <div class="card-header">
       <h3><a href = {{ place.official_url }} target="_blank">
               {{ place.title }}
-            </a></h3>
+            </a>
+      </h3>
+      {% for rating in place.ratings %}
+       <span class="small badge badge-danger">{{ rating }}</span>
+      {% endfor %}
+
       <a class="btn btn-link"
         href = "https://www.google.com/maps/search/?api=1&query={{ place.lat }},{{ place.lng }}&query={{ place.title }}"
         target="_blank">
@@ -68,6 +73,11 @@
   </div>
   {% endfor %}
 </div>
+
+<code>
+  "{{ response }}"
+</code>
+
 
 <script>
 function submitPosition(position) {

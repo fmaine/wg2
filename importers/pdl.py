@@ -107,9 +107,9 @@ class PudloImporter(wg2.importers.base.Importer):
                         'city': city,
                         'code': code,
                     }
-        ret['tags'] = json.dumps(
+        ret['tags_json'] = json.dumps(
             selector.css('span.apropos_info_tag>a::text').getall())
-        ret['categories'] = json.dumps(
+        ret['categories_json'] = json.dumps(
             selector.css('span.apropos_info_cat>a::text').getall())
         if selector.css('div.icone_coeur_article').get() is not None:
             ret['rating'] = 'CoupCoeur'

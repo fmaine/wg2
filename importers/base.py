@@ -96,7 +96,7 @@ class Importer():
         self._dataset = pd.DataFrame(columns=self._place_keys)
         df_urls = self.load_urls()
         for index, row in df_urls.iterrows():
-            logging.info('Processing : ',index,' - ',row['url'])
+            logging.info('Processing : '+str(index)+' - '+row['url'])
             filename = self._data_root+'html/'+self._origin+'/'+row['filename']+self._page_extension
             if (os.path.exists(filename)):
                 with open(filename) as file:

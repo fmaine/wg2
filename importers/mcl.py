@@ -65,7 +65,7 @@ class MichelinImporter(wg2.importers.base.Importer):
             if len(rating_list)>0:
                 ret['rating'] = rating_list[0]
                 tags = tags + rating_list
-            ret['tags'] = json.dumps(tags)
+            ret['tags_json'] = json.dumps(tags)
         return ret
 
     def parse_address(self, address):

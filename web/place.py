@@ -71,6 +71,7 @@ class PlaceFinder():
             place['lat'] = row['lat']
             place['lng'] = row['lng']
             place['official_url'] = row['official_url']
+            place['ratings'] = json.loads(row['ratings'])
             place['reviews'] = list()
             id_place = self._places.index[position]
             for i_review, r_review in self._reviews[self._reviews['id_place']==id_place].iterrows():
@@ -82,32 +83,4 @@ class PlaceFinder():
                 review['tags'] = json.loads(r_review['tags'])
                 place['reviews'].append(review)
             self._places_found.append(place)
-        return self._places_found
-
-    def find_coords_old(self,lat,lng,n_page,page_size):
-        self._places_found = []
-        self._places['dist'] = ((self._places['lat']- lat)**2 + (self._places['lng']- lng)**2)
-        self._places = self._places.sort_values('dist')
-        nb_reviews = self._places.shape[0]
-        n = 0
-        for index, row in self._places.iterrows():
-            place = dict()
-            place['title'] = row['title']
-            place['address'] = row['address']
-            place['lat'] = row['lat']
-            place['lng'] = row['lng']
-            place['official_url'] = row['official_url']
-            place['reviews'] = list()
-            for i_review, r_review in self._reviews[self._reviews['id_place']==index].iterrows():
-                review = dict()
-                review['origin'] = self._origin_labels[r_review['origin']]
-                review['url'] = r_review['url']
-                review['review_date'] = r_review['review_date']
-                review['details'] = r_review['details']
-                review['tags'] = json.loads(r_review['tags'])
-                place['reviews'].append(review)
-            self._places_found.append(place)
-            n += 1
-            if (n > self._pagesize):
-                break
         return self._places_found

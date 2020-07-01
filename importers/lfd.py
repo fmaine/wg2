@@ -61,19 +61,5 @@ class FoodingImporter(wg2.importers.base.Importer):
                 if coords is not None :
                     result['lat'] = coords[0]
                     result['lng'] = coords[1]
-            result['tags'] = json.dumps([tag.strip() for tag in selector.css('span.place-tag-list > a > span[itemProp]::text').getall()])
+            result['tags_json'] = json.dumps([tag.strip() for tag in selector.css('span.place-tag-list > a > span[itemProp]::text').getall()])
         return result
-
-"""
-        title = selector.css('h1.place-title::text').get()
-        if title is not None :
-            result['origin'] = self._origin
-            result['title'] = title.strip()
-            result['url'] = url
-            result['details'] = selector.css('section div.fragment-text > p::text').get().strip()
-            result['lat'] = selector.css('div.geo > div.latitude::text').get()
-            result['lng'] = selector.css('div.geo > div.longitude::text').get()
-            result['address'] = ' '.join(item.strip() for item in selector.css('div.adr > div[itemprop]::text').getall())
-            result['tags'] = json.dumps([tag.strip() for tag in selector.css('span.place-tag-list > a > span[itemProp]::text').getall()])
-        return result
-"""

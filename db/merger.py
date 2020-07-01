@@ -13,14 +13,19 @@ __email__ = "fm@freedom-partners.com"
 '''
 
 import logging
-import wg2.util.text
+import json
 import pandas as pd
+import wg2.util.text
+import wg2.util.progress_monitor
+import wg2.db.tags
 
 class PlaceDataframe():
 
     def __init__(self):
         self._places = pd.DataFrame(columns = ['title', 'title_n', 'address', 'addr_details',
-                                                'lat', 'lng', 'official_url', 'closed'])
+                                                'lat', 'lng', 'official_url',
+                                                'closed','tags','ratings'])
+        self._pm = wg2.util.progress_monitor.ProgressMonitor("Merger")
 
     def insert(self, item):
         if (self._places.shape[0] == 0):
@@ -46,8 +51,8 @@ class PlaceDataframe():
 
 class Merger():
 
-    _sources = ['pdl','tra','mcl','lfd','tmo']
-#    _sources = ['pdl','tra','mcl','lfd'] # Timeout import not ready...
+#    _sources = ['pdl','tra','mcl','lfd','tmo']
+    _sources = ['pdl','tra','mcl','lfd'] # Timeout import not ready...
     _data_root = 'data/'
     _reviews_filename = _data_root+'reviews.csv'
     _place_replace_filename = _data_root+'place_replace.csv'
@@ -91,11 +96,26 @@ class Merger():
         pdf = PlaceDataframe()
         self._reviews = pd.read_csv(self._reviews_filename)
         self._reviews['title_n'] = self._reviews['title'].apply(lambda txt: wg2.util.text.normalize(txt))
+        self._pm.reset(self._reviews.shape[0])
         for i in range(0,self._reviews.shape[0]):
             item = dict()
+            self._pm.increment()
             for key in ['title', 'title_n', 'address', 'addr_details', 'lat', 'lng', 'official_url', 'closed']:
                 item[key] = self._reviews.loc[i][key]
             id = pdf.find_or_insert(item)
             self._reviews.at[i,'id_place']=id
         self._reviews.to_csv(self._review_db_filename)
         pdf._places.to_csv(self._place_db_filename)
+
+    def process_tags(self):
+        place_db = pd.read_csv(self._place_db_filename)
+        review_db = pd.read_csv(self._review_db_filename)
+        place_ratings = wg2.db.tags.TagList()
+        for i in range(0,review_db.shape[0]):
+            review_rating = str(review_db.loc[i]['rating'])
+            if review_rating is not None and len(review_rating)>2 :
+                id_place = int(review_db.loc[i]['id_place'])
+                place_ratings.loads(place_db.iloc[id_place]['ratings'])
+                place_ratings._tags.append(wg2.db.tags._rating_tags.get(review_rating))
+                place_db.at[id_place,'ratings']=place_ratings.dumps()
+        place_db.to_csv(self._place_db_filename)
