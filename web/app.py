@@ -8,6 +8,7 @@ from flask import render_template
 from flask import request
 
 import os
+import logging
 
 import wg2.web.place
 
@@ -15,6 +16,9 @@ app = Flask(__name__,
             static_url_path='',
             static_folder='static',
             template_folder='templates')
+
+logging.basicConfig(filename='where-guru.log',
+    level=os.environ.get('WHERE_LOG_LEVEL',logging.DEBUG))
 
 pf = wg2.web.place.PlaceFinder()
 
