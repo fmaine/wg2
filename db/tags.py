@@ -1,9 +1,4 @@
-__author__ = "Francois Maine"
-__copyright__ = "Copyright 2020, freedom Partners"
-__email__ = "fm@freedom-partners.com"
-
-'''
-    wg2 Merger
+'''wg2 Merger
     Synopsis :
         merger.merge_reviews() : Merge all reviews ina single file / dataframe
         merger.replace_places() : unify matching places with different names
@@ -11,6 +6,10 @@ __email__ = "fm@freedom-partners.com"
         merger.create_db() : Creates db files for website
 
 '''
+__author__ = "Francois Maine"
+__copyright__ = "Copyright 2020, freedom Partners"
+__email__ = "fm@freedom-partners.com"
+
 
 import logging
 import json

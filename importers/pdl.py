@@ -9,6 +9,7 @@ __email__ = "fm@freedom-partners.com"
 
 
 import datetime
+import logging
 import re
 import json
 import urllib.parse
@@ -21,6 +22,7 @@ class PudloImporter(wg2.importers.base.Importer):
     """PudloImporter"""
     def __init__(self):
         self._origin = 'pdl'
+        self._pm.name(self._origin)
 
     def acquire_list(self):
         """Loads and saves review url list"""
@@ -37,7 +39,7 @@ class PudloImporter(wg2.importers.base.Importer):
         continue_loop = True
         while continue_loop:
             ws_data['paged'] = num_page
-            print('Requesting : ', ws_data)
+            logging.info('Requesting : ' + str(ws_data))
             r = requests.post(url=ws_url, data=ws_data)
             if r.text.strip() == '':
                 continue_loop = False
@@ -46,10 +48,10 @@ class PudloImporter(wg2.importers.base.Importer):
                 urls_page = selector.css('h3.h3_poi>a::attr(href)').getall()
                 for url in urls_page:
                     if (df_urls['url'] == url).any():
-                        print('Existing url : ', url)
-                        continue_loop = False
+                        logging.info('Existing url : ' + url)
+#                        continue_loop = False
                     else:
-                        print('New url : ', url)
+                        logging.info('New url : '+ url)
                         df_urls = df_urls.append(
                             {
                                 'url': url,
@@ -107,10 +109,10 @@ class PudloImporter(wg2.importers.base.Importer):
                         'city': city,
                         'code': code,
                     }
-        ret['tags_json'] = json.dumps(
-            selector.css('span.apropos_info_tag>a::text').getall())
-        ret['categories_json'] = json.dumps(
-            selector.css('span.apropos_info_cat>a::text').getall())
+        ret['tags'] = selector.css('span.apropos_info_tag>a::text').getall()
+        ret['tags_json'] = json.dumps(ret['tags'])
+        ret['categories'] = selector.css('span.apropos_info_cat>a::text').getall()
+        ret['categories_json'] = json.dumps(ret['categories'])
         if selector.css('div.icone_coeur_article').get() is not None:
             ret['rating'] = 'CoupCoeur'
         elif selector.css('div.icone_gueule_article').get() is not None:

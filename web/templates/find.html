@@ -16,19 +16,21 @@
     </div>
     <input type="text" class="form-control" id="address" name="address"
     {% if response.address %} value="{{ response.address }}" {% endif %} >
+    <input type="hidden" class="form-control" id="lat" name="lat" >
+    <input type="hidden" class="form-control" id="lng" name="lng" >
   </div>
+  <!--
   <div class="input-group mb-3">
     <div class="input-group-prepend">
       <span class="input-group-text">Mots clefs</span>
     </div>
     <input type="text" class="form-control" id="words" name="words"
     {% if response.words %} value="{{ response.words }}" {% endif %} >
-    <input type="hidden" class="form-control" id="lat" name="lat" >
-    <input type="hidden" class="form-control" id="lng" name="lng" >
   </div>
-  <div class="div-buttons clearfix">
-    <button class="btn btn-primary float-left" type="submit">Rechercher</button>
-    <button type="button" onclick="autourDeMoi()" class="btn btn-primary float-right">Autour de moi</button>
+  -->
+  <div class="div-buttons text-center">
+    <button class="btn btn-primary" type="submit">Rechercher</button>
+    <button type="button" onclick="autourDeMoi()" class="btn btn-primary">Autour de moi</button>
   </div>
 </form>
 <sr/>
@@ -53,10 +55,6 @@
         target="_blank">
         {{ place.address }}
       </a>
-      <br>
-      <code>
-        "{{ place.title }}","{{ place.address }}"
-      </code>
     </div>
     <div class="card-body">
       {% for review in place.reviews %}

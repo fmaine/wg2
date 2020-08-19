@@ -9,7 +9,9 @@ __email__ = "fm@freedom-partners.com"
     Nedds to be subclassed for each datasource
 
     Synopsys :
-
+        importer.acquire_list() : get the list of urls
+        importer.acquire_pages() : get the html pages
+        importer.init_dataset() / update_dataset : Parse the pages into the dataset
 
 '''
 
@@ -21,6 +23,8 @@ import requests
 import parsel
 import pandas as pd
 import wg2.util.geocoder
+import wg2.util.progress_monitor
+
 
 class Importer():
 
@@ -32,8 +36,8 @@ class Importer():
         'title', 'address', 'addr_details', 'lat', 'lng', 'official_url', 'timestamp', 'closed',
         'origin', 'url', 'tags', 'rating', 'review_date', 'details',
     ]
-
     _dataset = ''
+    _pm = wg2.util.progress_monitor.ProgressMonitor()
 
     def __init__(self):
         pass
@@ -75,18 +79,15 @@ class Importer():
     def parse_page(self, url, page):
         pass
 
-    def acquire_list(self):
-        pass
-
     def acquire_pages(self):
         df_urls = self.load_urls()
         for index, row in df_urls.iterrows():
             filename = self._data_root+'html/'+self._origin+'/'+row['filename']+'.html'
             if (os.path.exists(filename)):
-                print("Ignoring ",row['filename'])
+                logging.info("Ignoring "+self._origin+" "+row['filename'])
                 pass
             else :
-                print("Loading ",row['filename'])
+                logging.info("Acquiring "+self._origin+" "+row['filename'])
                 r=requests.get(row['url'])
                 f = open(filename, "a")
                 f.write(r.text)
@@ -96,7 +97,7 @@ class Importer():
         self._dataset = pd.DataFrame(columns=self._place_keys)
         df_urls = self.load_urls()
         for index, row in df_urls.iterrows():
-            logging.info('Processing : '+str(index)+' - '+row['url'])
+            logging.info('Processing : '+self._origin+" "+str(index)+' - '+row['url'])
             filename = self._data_root+'html/'+self._origin+'/'+row['filename']+self._page_extension
             if (os.path.exists(filename)):
                 with open(filename) as file:
@@ -105,9 +106,9 @@ class Importer():
                     if (data.get('title') and data.get('details')):
                         self._dataset = self._dataset.append(data, ignore_index=True)
                     else:
-                        logging.info('No title or details')
+                        logging.warning('No title or details')
             else:
-                logging.info('File not found')
+                logging.error('File not found')
         self._dataset = self._dataset[self._dataset['details'].notnull()]
         self.save_dataset()
         return self._dataset
@@ -117,9 +118,9 @@ class Importer():
         df_urls = self.load_urls()
         for index, row in df_urls.iterrows():
             if (self._dataset['url'] == row['url']).any():
-                print('Existing url : ',row['url'])
+                logging.info('Existing url : '+self._origin+" "+row['url'])
             else:
-                print('New url : ',row['url'])
+                logging.info('New url : '+self._origin+" "+row['url'])
                 filename = self._data_root+'html/'+self._origin+'/'+row['filename']+'.html'
                 if (os.path.exists(filename)):
                     with open(filename) as file:

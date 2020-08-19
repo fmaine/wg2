@@ -71,7 +71,7 @@ class PlaceFinder():
             place['lat'] = row['lat']
             place['lng'] = row['lng']
             place['official_url'] = row['official_url']
-            place['ratings'] = json.loads(row['ratings'])
+#            place['ratings'] = json.loads(row['ratings'])
             place['reviews'] = list()
             id_place = self._places.index[position]
             for i_review, r_review in self._reviews[self._reviews['id_place']==id_place].iterrows():
@@ -80,7 +80,7 @@ class PlaceFinder():
                 review['url'] = r_review['url']
                 review['review_date'] = r_review['review_date']
                 review['details'] = r_review['details']
-                review['tags'] = json.loads(r_review['tags'])
+                review['tags'] = json.loads(r_review['tags_json'])
                 place['reviews'].append(review)
             self._places_found.append(place)
         return self._places_found

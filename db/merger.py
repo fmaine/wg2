@@ -9,6 +9,7 @@ __email__ = "fm@freedom-partners.com"
         merger.replace_places() : unify matching places with different names
         merger.close_places() : Marks closed corresponding places
         merger.create_db() : Creates db files for website
+        merger.process_tags()
 
 '''
 
@@ -25,7 +26,6 @@ class PlaceDataframe():
         self._places = pd.DataFrame(columns = ['title', 'title_n', 'address', 'addr_details',
                                                 'lat', 'lng', 'official_url',
                                                 'closed','tags','ratings'])
-        self._pm = wg2.util.progress_monitor.ProgressMonitor("Merger")
 
     def insert(self, item):
         if (self._places.shape[0] == 0):
@@ -59,6 +59,7 @@ class Merger():
     _place_closed_filename = _data_root+'place_closed.csv'
     _place_db_filename = _data_root+'place_db.csv'
     _review_db_filename = _data_root+'review_db.csv'
+    _pm = wg2.util.progress_monitor.ProgressMonitor("Merger")
 
     def merge_reviews(self):
         reviews = pd.DataFrame()
@@ -116,6 +117,8 @@ class Merger():
             if review_rating is not None and len(review_rating)>2 :
                 id_place = int(review_db.loc[i]['id_place'])
                 place_ratings.loads(place_db.iloc[id_place]['ratings'])
-                place_ratings._tags.append(wg2.db.tags._rating_tags.get(review_rating))
-                place_db.at[id_place,'ratings']=place_ratings.dumps()
+                t = wg2.db.tags._rating_tags.get(review_rating)
+                if t is not None:
+                    place_ratings._tags.append(t)
+                    place_db.iloc[id_place]['ratings']=json.dumps(t)
         place_db.to_csv(self._place_db_filename)

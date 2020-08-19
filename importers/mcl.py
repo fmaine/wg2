@@ -14,6 +14,7 @@ class MichelinImporter(wg2.importers.base.Importer):
 
     def __init__(self):
         self._origin = 'mcl'
+        self._pm.name(self._origin)
 
     def acquire_list(self):
         url_domain = 'https://www.viamichelin.fr'
@@ -28,9 +29,9 @@ class MichelinImporter(wg2.importers.base.Importer):
                 for url in urls_page:
                     full_url = url_domain+url
                     if (df_urls['url']==full_url).any():
-                        print('Existing url : ',full_url)
+                        logging.info('Existing url : '+full_url)
                     else:
-                        print('New url : ',full_url)
+                        logging.info('New url : '+full_url)
                         df_urls = df_urls.append({'url': full_url,'filename': self.url_to_filename(url)}, ignore_index=True)
             df_urls.to_csv(self.urls_filename(), index=False)
         df_urls.to_csv(self.urls_filename(), index=False)
@@ -65,6 +66,7 @@ class MichelinImporter(wg2.importers.base.Importer):
             if len(rating_list)>0:
                 ret['rating'] = rating_list[0]
                 tags = tags + rating_list
+            ret['tags'] = tags
             ret['tags_json'] = json.dumps(tags)
         return ret
 

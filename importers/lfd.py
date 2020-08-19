@@ -23,6 +23,7 @@ class FoodingImporter(wg2.importers.base.Importer):
 
     def __init__(self):
         self._origin = 'lfd'
+        self._pm.name(self._origin)
 
     def acquire_list(self):
         """Loads and saves review url list"""
@@ -61,5 +62,6 @@ class FoodingImporter(wg2.importers.base.Importer):
                 if coords is not None :
                     result['lat'] = coords[0]
                     result['lng'] = coords[1]
-            result['tags_json'] = json.dumps([tag.strip() for tag in selector.css('span.place-tag-list > a > span[itemProp]::text').getall()])
+            result['tags'] = [tag.strip() for tag in selector.css('span.place-tag-list > a > span[itemProp]::text').getall()]
+            result['tags_json'] = json.dumps(result['tags'])
         return result

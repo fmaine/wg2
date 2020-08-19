@@ -9,7 +9,7 @@ import os
 
 class ProgressMonitor():
 
-    def __init__(self,name,log_dir=''):
+    def __init__(self,name='pm',log_dir=''):
         self._name = name
         self._info =''
         self._filename = log_dir+name+'.json'
@@ -24,6 +24,9 @@ class ProgressMonitor():
         self._progress = 0
         self._time_start=time.time()
         self._last_pub=self._time_start
+
+    def name(self,text):
+        self._name = text
 
     def info(self,text):
         self._info = text

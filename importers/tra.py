@@ -15,6 +15,7 @@ class TeleramaImporter(wg2.importers.base.Importer):
 
     def __init__(self):
         self._origin = 'tra'
+        self._pm.name(self._origin)
 
     def acquire_list(self):
         url_domain = 'https://sortir.telerama.fr'
@@ -29,9 +30,9 @@ class TeleramaImporter(wg2.importers.base.Importer):
                 for url in urls_page:
                     full_url = url_domain+url
                     if (df_urls['url']==full_url).any():
-                        print('Existing url : ',full_url)
+                        logging.info('Existing url : ' + full_url)
                     else:
-                        print('New url : ',full_url)
+                        logging.info('New url : ' + full_url)
                         df_urls = df_urls.append({'url': full_url,'filename': self.url_to_filename(url)}, ignore_index=True)
             df_urls.to_csv(self.urls_filename(), index=False)
         df_urls.to_csv(self.urls_filename(), index=False)
@@ -62,7 +63,8 @@ class TeleramaImporter(wg2.importers.base.Importer):
                 locale.setlocale(locale.LC_ALL, 'fr_FR.UTF-8')
                 DATE_FORMAT = "%d %B %Y"
                 result['review_date'] = datetime.datetime.strptime(dates_text[0], DATE_FORMAT)
-            result['tags'] = json.dumps(selector.css('div.fiche--tags>ul>li>a::text').getall())
+            result['tags_json'] = json.dumps(selector.css('div.fiche--tags>ul>li>a::text').getall())
+            result['tags'] = selector.css('div.fiche--tags>ul>li>a::text').getall()
             result['rating'] = selector.css('p.rating--tra>span::text').get().strip()
         return result
 

@@ -58,7 +58,7 @@ class TimeoutImporter(wg2.importers.base.Importer):
         url_list = list()
         base_url ='https://www.timeout.fr/graffiti/v1/sites/fr-paris/search?view=complete&locale=fr-FR&what=((`node-7083`))&page_size=1000&page_number='
         for page_num in range(0,12):
-            print(page_num)
+            logging.info(page_num)
             url = base_url+str(page_num+1)
             r = requests.get(url,headers={'Authorization': 'Bearer QNVHoWr0RSevFb-nUgUueoxTPKNyhgubP2StprnIoN0'})
             data = json.loads(r.text)
